@@ -1,25 +1,25 @@
-### Modules, Providers, Services in NestJs
+# Modules, Providers, Services in NestJs
 
 @Module(){}
 
-### imports:[]
+## imports:[]
 
 A list of Moudules
 Could be external module like (TypeOrmModule, MongooseModule) or internal module (Authentication, Services ..)
 
 Modules imported will be available in both Controller and Providers
 
-### controllers: []
+## controllers: []
 
 Commonly is a list of defined API
 
-### providers:[]
+## providers:[]
 
 A list of Services that handle logic (Database query, Authorize, ..)
 
 A Providers must be start with `@Injectable()`
 
-### exports:[]
+## exports:[]
 
 In Nestjs, we can exports Providers (Services that handle logic) or exports Modules (any Modules, but typically external module)
 
