@@ -4,31 +4,115 @@
 
 ### imports:[]
 
-Import các Module đến từ database : TypeOrmModule và MongooseModule hoặc `Module KHÁC` bên trong project (ví dụ Module Authentication mà cung cấp Service Authentication ). Các Module được `import` sẽ được dùng trong cả `controllers` và `providers`
+A list of Moudules
+Could be external module like (TypeOrmModule, MongooseModule) or internal module (Authentication, Services ..)
+
+Modules imported will be available in both Controller and Providers
 
 ### controllers: []
 
-API end-point. Controller thường sẽ sử dụng `Module Khác`
+Commonly is a list of defined API
 
-### providers:[] 
+### providers:[]
 
-Service xử lý logic (xử lý upload, query đến DB)
+A list of Services that handle logic (Database query, Authorize, ..)
+
+A Providers must be start with `@Injectable()`
 
 ### exports:[]
 
-Trong Nest, ta có thể exports các Providers hoặc exports Module. Khi một Module A exports Module B khác, nó sẽ exports các Providers mà Module B exports. Đặc biệt dùng khi mà Module B được import từ thư viện.
+In Nestjs, we can exports Providers (Services that handle logic) or exports Modules (any Modules, but typically external module)
 
-  ```Typescript
-    import { PassportModule } from '@nestjs/passport';
-    @Module({
-        exports:[PassportModule,AuthService]
-    })
-    class AuthModule
+Ex: Module A exports Module B: means it exports any Providers that exported from Module B. Module B can be external
 
-    @Module({
-    imports: [AuthenticationModule],
-    controllers: [],
-    providers: [],
+```Typescript
+  import { PassportModule } from '@nestjs/passport';
+  @Module({
+      exports:[ PassportModule - External Module from passport, AuthService - Service that handles Authentication Logic]
+  })
+  class AuthenticationModule
+
+
+  @Module({
+  imports: [AuthenticationModule - Import PassportModule and AuthService],
+  controllers: [],
+  providers: [],
+  })
+  class AccountModule
+```
+
+# Guards
+
+A class with `@Injectable()` and implements `CanActive` interface
+
+# Validation
+
+class-validator and class-transformer are powerful tools for validation in Nestjs
+
+First, in `main.ts` we enable globlal-scoped Pipe so that it is applied to every route handler
+
+```Typescript
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+```
+
+- Validate Nested Object
+
+```Typescript
+  class Contact {
+    @IsNotEmpty()
+    @IsNumber()
+    phone: number;
+
+    @IsNotEmpty()
+    address: string;
+  }
+
+  class User{
+    @IsNotEmpty({
+      message: 'Contact_2 is required',
     })
-    class AccountModule
-  ```
+    @Type(() => Contact)
+    @ValidateNested()
+    contact_object: Contact;
+  }
+```
+
+- Validate Nested Array of Objects
+
+```Typescript
+  class Contact {
+    @IsNotEmpty()
+    @IsNumber()
+    phone: number;
+
+    @IsNotEmpty()
+    address: string;
+  }
+
+  class User{
+    @ArrayNotEmpty({
+      message: 'Contact_1 is required',
+    })
+    @Type(() => Contact)
+    @ValidateNested({ each: true })
+    contact_array: Contact[];
+  }
+```
+
+# Mongoose
+
+# Typeorm
+
+# Logger Winston
+
+# Cron Jobs
+
+# GraphQL
+
+# Socket

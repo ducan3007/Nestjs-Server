@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+import { AccountModule } from 'modules/account/account.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -27,6 +28,7 @@ import env from 'common/env.config';
         };
       },
     }),
+    AccountModule,
   ],
   controllers: [AppController],
   providers: [AppService],

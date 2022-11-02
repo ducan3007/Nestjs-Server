@@ -11,6 +11,8 @@ export class AccountService {
   ) {}
 
   async createAccount(account: Account) {
+    const hashPassword = Utils.hashPassword(account.password);
+
     const createdAccount = new this.accountModel(account);
     return createdAccount.save();
   }
