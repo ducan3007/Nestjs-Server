@@ -4,6 +4,7 @@ import {
   IsNumber,
   ValidateNested,
   ArrayNotEmpty,
+  IsObject,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Match } from 'common/decorator/match.decorator';
@@ -47,16 +48,17 @@ export class SignupReq {
   passwordConfirm: string;
 
   @ArrayNotEmpty({
-    message: 'Contact_1 is required',
+    message: 'contact_array is required',
   })
   @Type(() => Contact)
   @ValidateNested({ each: true })
-  contact_1: Contact[];
+  contact_array: Contact[];
 
   @IsNotEmpty({
-    message: 'Contact_2 is required',
+    message: 'contact_object is required',
   })
+  @IsObject()
   @Type(() => Contact)
   @ValidateNested()
-  contact_2: Contact;
+  contact_object: Contact;
 }

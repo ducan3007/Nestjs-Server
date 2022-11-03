@@ -5,6 +5,15 @@ export type AccountDocument = Account & Document;
 
 @Schema({
   collection: 'accounts',
+  timestamps: true,
+  toJSON: {
+    transform: (doc, ret) => {
+      delete ret.__v;
+      delete ret.password;
+      ret.id = ret._id;
+      delete ret._id;
+    },
+  },
 })
 export class Account {
   @Prop({ required: true, maxlength: 50 })
@@ -13,7 +22,7 @@ export class Account {
   @Prop({ required: true, unique: true, maxlength: 50 })
   email: string;
 
-  @Prop({ required: true, maxlength: 50 })
+  @Prop({ required: true })
   password: string;
 }
 

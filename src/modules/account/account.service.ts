@@ -13,8 +13,12 @@ export class AccountService {
   async createAccount(account: Account) {
     const hashPassword = Utils.hashPassword(account.password);
 
-    const createdAccount = new this.accountModel(account);
-    return createdAccount.save();
+    const newAccount = new this.accountModel({
+      username: account.username,
+      email: account.email,
+      password: hashPassword,
+    });
+    return newAccount.save();
   }
 
   async findAccountById(id: Account) {
@@ -24,5 +28,9 @@ export class AccountService {
       return null;
     }
     return account;
+  }
+
+  async getAllAccounts() {
+    return this.accountModel.find();
   }
 }
