@@ -1,22 +1,22 @@
 ## Modules, Providers, Services in NestJs
 
-### imports:[]
+### `imports:[]`
 
 - A list of Moudules.
 - Modules could be external module like (TypeOrmModule, MongooseModule) or internal module (Authentication, Services ..).
 - Modules imported will be available in both Controller and Providers.
 
-### controllers: []
+### `controllers: []`
 
 Commonly is a list of end-point, API
 
-### providers:[]
+### `providers:[]`
 
 A list of Services that handle logic (Database query, Authorize, ..)
 
 A Providers must be start with `@Injectable()`
 
-### exports:[]
+### `exports:[]`
 
 In Nestjs, we can exports Providers (Services that handle logic) or exports Modules (any Modules, but typically external module)
 
@@ -44,7 +44,7 @@ A class with `@Injectable()` and implements `CanActive` interface
 
 ## Validation
 
-class-validator and class-transformer are powerful tools for validation in Nestjs
+[class-validator](https://github.com/typestack/class-validator) and [class-transformer](https://github.com/typestack/class-transformer) are powerful tools for validation in Nestjs
 
 First, in `main.ts` we enable globlal-scoped Pipe so that it is applied to every route handler
 
