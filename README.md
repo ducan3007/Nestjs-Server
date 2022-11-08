@@ -107,7 +107,7 @@ First, in `main.ts` we enable globlal-scoped Pipe so that it is applied to every
   }
 ```
 
-## Token-based authentication strateries
+## Token-based authentication strategies
 
 1. Save on localhost: 
 - Easy for test
