@@ -107,6 +107,16 @@ First, in `main.ts` we enable globlal-scoped Pipe so that it is applied to every
   }
 ```
 
+## Authentication stratery
+
+1. Save on localhost: 
+- Easy for test
+
+
+2. JWT httpOnly Cookie
+- Auth server `/login` and your `/api` must be hosted on the same domain
+
+
 ## Mongoose
 
 ## Typeorm
