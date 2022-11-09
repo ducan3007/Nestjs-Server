@@ -1,5 +1,7 @@
 ## Modules, Providers, Services in NestJs
 
+[https://docs.nestjs.com/modules](https://docs.nestjs.com/modules)
+
 ### `imports:[]`
 
 - A list of Moudules.
@@ -37,6 +39,10 @@ Ex: Module A exports Module B: means it exports any Providers that exported from
   })
   class AccountModule
 ```
+
+### `Dynamic Module`
+
+[https://wanago.io/2022/08/15/api-with-nestjs-dynamic-modules/](https://wanago.io/2022/08/15/api-with-nestjs-dynamic-modules/)
 
 ## Guards
 
