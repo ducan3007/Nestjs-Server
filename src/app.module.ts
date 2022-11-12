@@ -1,12 +1,19 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { GraphQLModule } from '@nestjs/graphql';
 
+import { AuthenticationModule } from 'modules/auth/auth.module';
 import { AccountModule } from 'modules/account/account.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 import env from 'common/env.config';
+
+mongoose.set('returnOriginal', false);
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,6 +35,13 @@ import env from 'common/env.config';
         };
       },
     }),
+    // GraphQLModule.forRoot<ApolloDriverConfig>({
+    //   driver: ApolloDriver,
+    //   installSubscriptionHandlers: true,
+    //   subscriptions: {
+    //     'graphql-ws': true,
+    //   },
+    // }),
     AccountModule,
   ],
   controllers: [AppController],

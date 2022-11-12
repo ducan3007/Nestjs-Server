@@ -112,7 +112,7 @@ First, in `main.ts` we enable globlal-scoped Pipe so that it is applied to every
     contact_array: Contact[];
   }
 ```
-
+## Redis
 ## Mongoose
 
 ## Typeorm
