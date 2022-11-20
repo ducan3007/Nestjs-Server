@@ -5,25 +5,31 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class MailService {
-   private readonly transporter: Mail;
+  private readonly transporter: Mail;
 
-   constructor(private readonly configService: ConfigService) {
-      const host = this.configService.get('HOST');
-      const username = this.configService.get('USER');
-      const password = this.configService.get('PASS');
+  constructor(private readonly configService: ConfigService) {
+    const host = this.configService.get('HOST');
+    const username = this.configService.get('USER');
+    const password = this.configService.get('PASS');
 
-      this.transporter = createTransport({
-         host: host,
-         secure: true,
-         port: 465,
-         auth: {
-            user: username,
-            pass: password,
-         },
-      });
-   }
+    this.transporter = createTransport({
+      host: host,
+      port: 465,
+      secure: true,
+      auth: {
+        user: username,
+        pass: password,
+      },
+    });
+  }
 
-   async sendMail(options: Mail.Options) {
+  async sendMail(options: Mail.Options) {
+    try {
+      console.log('Sending mail...', options);
+
       return this.transporter.sendMail(options);
-   }
+    } catch (error) {
+      console.log('Error sending mail', error);
+    }
+  }
 }

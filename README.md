@@ -113,6 +113,7 @@ First, in `main.ts` we enable globlal-scoped Pipe so that it is applied to every
   }
 ```
 ## Redis
+
 ## Token-based authentication strategies
 
 1. Save on localhost: 
@@ -134,3 +135,8 @@ First, in `main.ts` we enable globlal-scoped Pipe so that it is applied to every
 ## GraphQL
 
 ## Socket
+
+## Nodemailer
+
+#1 You must enable 2 factor Authentication in your Gmail Account
+#2 Add App Password
