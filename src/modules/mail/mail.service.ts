@@ -1,16 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { createTransport } from 'nodemailer';
-import * as Mail from 'nodemailer/lib/mailer';
-import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common'
+import { createTransport } from 'nodemailer'
+import * as Mail from 'nodemailer/lib/mailer'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class MailService {
-  private readonly transporter: Mail;
+  private readonly transporter: Mail
 
   constructor(private readonly configService: ConfigService) {
-    const host = this.configService.get('HOST');
-    const username = this.configService.get('USER');
-    const password = this.configService.get('PASS');
+    const host = this.configService.get('HOST')
+    const username = this.configService.get('USER')
+    const password = this.configService.get('PASS')
 
     this.transporter = createTransport({
       host: host,
@@ -18,18 +18,18 @@ export class MailService {
       secure: true,
       auth: {
         user: username,
-        pass: password,
-      },
-    });
+        pass: password
+      }
+    })
   }
 
   async sendMail(options: Mail.Options) {
     try {
-      console.log('Sending mail...', options);
+      console.log('Sending mail...', options)
 
-      return this.transporter.sendMail(options);
+      return this.transporter.sendMail(options)
     } catch (error) {
-      console.log('Error sending mail', error);
+      console.log('Error sending mail', error)
     }
   }
 }

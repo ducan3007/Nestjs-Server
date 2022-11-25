@@ -1,0 +1,19 @@
+version: '3'
+services:
+  postgres:
+    container_name: nest-postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=nestjs
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - nest-network
+networks:
+  nest-network:
+    driver: bridge

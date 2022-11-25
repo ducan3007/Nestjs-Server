@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt'
 
 export class Utils {
   /**
@@ -6,10 +6,10 @@ export class Utils {
    * @returns
    */
   static hashPassword(password: string) {
-    return bcrypt.hashSync(password, 10);
+    return bcrypt.hashSync(password, 10)
   }
 
   static comparePassword(password: string, hashPassword: string) {
-    return bcrypt.compareSync(password, hashPassword);
+    return bcrypt.compareSync(password, hashPassword)
   }
 }

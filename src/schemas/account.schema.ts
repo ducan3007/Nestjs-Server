@@ -5,21 +5,21 @@ export type AccountDocument = Account & Document
 
 @Schema({
   collection: 'accounts',
-  timestamps: true
-  // toJSON: {
-  //   transform: (doc, ret) => {
-  //     delete ret.__v
-  //     delete ret.password
-  //     ret.id = ret._id
-  //     delete ret._id
-  //   }
-  // }
+  timestamps: true,
+  toJSON: {
+    transform: (doc, ret) => {
+      delete ret.__v
+      delete ret.password
+      ret.id = ret._id
+      delete ret._id
+    }
+  }
 })
 export class Account extends CommonSchema {
-  @Prop({ required: true, maxlength: 50 })
+  @Prop({ required: false, maxlength: 50 })
   username: string
 
-  @Prop({ required: true, unique: true, maxlength: 50 })
+  @Prop({ required: true, unique: false, maxlength: 50 })
   email: string
 
   @Prop({ required: true })

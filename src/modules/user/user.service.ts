@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class UserService {
+  contructor() {}
+
   getUserName(): string {
-    return 'John Doe';
+    return 'John Doe'
   }
 }

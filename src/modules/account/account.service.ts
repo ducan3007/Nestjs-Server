@@ -5,19 +5,24 @@ import { Account, AccountDocument } from 'schemas/account.schema'
 
 import { AuthService } from 'modules/auth/auth.service'
 import { SignupReq } from './dtos'
-import { Utils } from 'utils/utils'
+import { Utils } from 'utils/password'
 import { response } from 'utils/helper'
 import { MailService } from 'modules/mail/mail.service'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { UserEntity } from 'postgres/user.entity'
+
 @Injectable()
 export class AccountService {
   constructor(
     @InjectModel(Account.name) private accountModel: Model<AccountDocument>,
     @Inject(AuthService) private readonly authService: AuthService,
-    @Inject(MailService) private readonly mailService: MailService
+    @Inject(MailService) private readonly mailService: MailService,
+    @InjectRepository(UserEntity) private readonly userRepo: Repository<UserEntity>
   ) {}
 
   async createAccount(account: SignupReq) {
-    const accountInfo = await this.accountModel.findOne({
+    const accountInfo = await this.userRepo.findOneBy({
       email: account.email
     })
     if (accountInfo) throw new HttpException('Email is already exist', HttpStatus.BAD_REQUEST)
@@ -25,28 +30,24 @@ export class AccountService {
     const hashPassword = Utils.hashPassword(account.password)
 
     const newAccount = {
-      username: account.username,
       email: account.email,
       password: hashPassword
     }
-
-    await new this.accountModel(newAccount).save()
+    await this.userRepo.save(newAccount)
 
     return response(newAccount)
   }
 
   async loginService(account: any) {
     try {
-      const accountInfo = await this.accountModel.findOne({
-        email: account.email
-      })
+      const accountInfo = await this.userRepo.findOneBy({ email: account.email })
 
       if (!accountInfo) return 'Account not found'
 
       const isMatch = Utils.comparePassword(account?.password, accountInfo?.password)
       if (!isMatch) return 'Password is not correct'
 
-      return await this.authService.createToken({ username: accountInfo.username, id: accountInfo._id }, '10m')
+      return await this.authService.createToken({ email: accountInfo.email, id: accountInfo.id }, '10m')
     } catch (error) {
       throw error
     }
@@ -57,19 +58,24 @@ export class AccountService {
 
     console.log('verify token payload', payload)
 
-    const accountInfo = await this.accountModel.findOne({ _id: payload.id })
+    const accountInfo = await this.userRepo.findOneBy({ id: payload.id })
 
     if (!accountInfo) throw new HttpException('Account not found', HttpStatus.BAD_REQUEST)
 
-    if (accountInfo.isVerified) throw new HttpException('Email is already verify', HttpStatus.BAD_REQUEST)
+    if (accountInfo.isVerify) throw new HttpException('Email is already verify', HttpStatus.BAD_REQUEST)
 
-    await this.accountModel.updateOne({ _id: payload.id }, { isVerified: true })
+    await this.userRepo.update(payload.id, { isVerify: true })
+
     return response('Email is verified')
   }
 
-  async getVerifyEmailToken(id: string) {
+  async getVerifyEmailToken(id: number) {
     const token = await this.authService.createToken({ id }, '10m')
-    const accountInfo = await this.accountModel.findOne({ _id: id })
+    const accountInfo = await this.userRepo.findOneBy({ id })
+
+    if (!accountInfo) throw new HttpException('Account not found', HttpStatus.BAD_REQUEST)
+
+    if (accountInfo.isVerify) throw new HttpException('Email is already verify', HttpStatus.BAD_REQUEST)
 
     await this.mailService.sendMail({
       from: 'jigracing@gmail.com<noreply@jigracing@gmail.com>',
@@ -81,6 +87,6 @@ export class AccountService {
   }
 
   async getAllAccounts() {
-    return await this.accountModel.find()
+    return await this.userRepo.find()
   }
 }
