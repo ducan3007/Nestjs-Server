@@ -2,6 +2,10 @@
 /dist
 /node_modules
 /.env
+package-lock.json
+crs.pem
+key.pem
+server.crt
 # Logs
 logs
 *.log
