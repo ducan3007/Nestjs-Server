@@ -3,27 +3,32 @@ import { MongooseModule } from '@nestjs/mongoose'
 import mongoose from 'mongoose'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
-
+import { entities } from './entity'
+import { APP_GUARD } from '@nestjs/core'
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { GraphQLModule } from '@nestjs/graphql'
 
-import { AuthenticationModule } from 'modules/auth/auth.module'
+import { AuthenticationModule } from 'modules/auth/authentication.module'
 import { AccountModule } from 'modules/account/account.module'
 import { MailModule } from 'modules/mail/mail.module'
-import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { PostModule } from './modules/post/post.module'
 
 import env from 'common/env.config'
+import { UserModule } from 'modules/users/user.module'
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler'
 
 mongoose.set('returnOriginal', false)
 
 @Module({
   imports: [
+    // Env config
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env']
     }),
+
+    // MongoDB
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -38,7 +43,8 @@ mongoose.set('returnOriginal', false)
         }
       }
     }),
-    // for PostgreSQL
+
+    // PostgreSQL
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -49,7 +55,7 @@ mongoose.set('returnOriginal', false)
         username: configService.get(env.POSTGRES_USER),
         password: configService.get(env.POSTGRES_PASSWORD),
         database: configService.get(env.POSTGRES_DB),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        entities,
         synchronize: true
       })
     }),
@@ -61,12 +67,26 @@ mongoose.set('returnOriginal', false)
     //     'graphql-ws': true,
     //   },
     // }),
+
+    // For Rate Limit
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 5
+    }),
+
     AccountModule,
     AuthenticationModule,
     MailModule,
-    PostModule
+    PostModule,
+    UserModule
   ],
-  controllers: [AppController],
-  providers: [AppService]
+  providers: [
+    AppService
+    // Should be  disabled in Development
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: ThrottlerGuard
+    // }
+  ]
 })
 export class AppModule {}

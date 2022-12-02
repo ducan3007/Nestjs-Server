@@ -6,10 +6,10 @@ import { ConfigService } from '@nestjs/config'
 export class AuthService {
   constructor(private readonly jwtService: JwtService, private configService: ConfigService) {}
 
-  async createToken(payload: any, expire: any) {
+  async createToken(payload: any, expire?: any): Promise<string> {
     return this.jwtService.signAsync(payload, {
-      expiresIn: expire,
-      secret: this.configService.get('JWT_SECRET')
+      secret: this.configService.get('JWT_SECRET'),
+      expiresIn: expire || this.configService.get('JWT_EXPIRES_IN')
     })
   }
 
@@ -18,9 +18,8 @@ export class AuthService {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get('JWT_SECRET')
       })
-
       return payload
-    } catch (error) {
+    } catch (e) {
       throw new HttpException('Token is not valid', HttpStatus.BAD_REQUEST)
     }
   }

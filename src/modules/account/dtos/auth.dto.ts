@@ -79,9 +79,10 @@ export class SignupReq {
 
 export class SignupRes {
   @ApiResponseProperty()
-  username: string
   email: string
-  id: string
+  id: any
+  isVerify: boolean
+  role: string
 }
 
 export class LoginReq {

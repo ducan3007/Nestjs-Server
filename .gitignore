@@ -11,6 +11,9 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+cert.key
+cert.pem
+
 data
 # OS
 .DS_Store
