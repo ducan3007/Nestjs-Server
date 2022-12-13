@@ -8,10 +8,9 @@ import {
   JoinColumn,
   OneToMany
 } from 'typeorm'
-import { Message } from './message.entity'
 
-@Entity({ name: 'conversation' })
-export class Conversation {
+@Entity({ name: 'friend_request' })
+export class FriendList {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
@@ -20,14 +19,6 @@ export class Conversation {
 
   @Column()
   receive_user: number
-
-  @OneToMany(() => Message, (message) => message.conversation, { cascade: true })
-  @JoinColumn()
-  messages: Message[]
-
-  @OneToOne(() => Message, (message) => message.id)
-  @JoinColumn({ name: 'last_message_id' })
-  last_message: Message
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: number

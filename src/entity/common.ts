@@ -16,8 +16,8 @@ export class CommonTimeStamp {
 }
 
 export class CommonMessage {
-  @PrimaryGeneratedColumn('uuid')
-  id: string
+  @PrimaryGeneratedColumn()
+  id: number
 
   @ManyToOne(() => UserEntity, (user) => user.messages)
   user: UserEntity
