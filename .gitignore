@@ -17,6 +17,7 @@ lerna-debug.log*
 
 cert.key
 cert.pem
+crs.pem
 
 data
 # OS
